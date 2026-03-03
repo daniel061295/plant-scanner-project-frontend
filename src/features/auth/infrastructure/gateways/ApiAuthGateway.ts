@@ -1,5 +1,6 @@
 import { IAuthGateway, AuthTokens } from '../../domain/ports/IAuthGateway';
 import { LoginDTO } from '../../application/dtos/LoginDTO';
+import { RegisterDTO } from '../../application/dtos/RegisterDTO';
 import { User } from '../../domain/entities/User';
 import { AppError } from '@/core/errors/AppError';
 
@@ -8,6 +9,38 @@ export class ApiAuthGateway implements IAuthGateway {
 
     constructor(baseUrl?: string) {
         this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+    }
+
+    async register(data: RegisterDTO): Promise<User> {
+        try {
+            const response = await fetch(`${this.baseUrl}/identity/users/`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new AppError(errorData.detail || 'Failed to register', response.status);
+            }
+
+            const responseData = await response.json();
+
+            // The backend returns user details, but not tokens for registration.
+            return {
+                id: responseData.id,
+                email: responseData.email,
+                name: responseData.username,
+            };
+        } catch (error) {
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError('Network error while registering', 500);
+        }
     }
 
     async login(credentials: LoginDTO): Promise<User> {
@@ -26,11 +59,11 @@ export class ApiAuthGateway implements IAuthGateway {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                
+
                 if (response.status === 401 || response.status === 400) {
                     throw new AppError(errorData.detail || 'Invalid credentials', response.status);
                 }
-                
+
                 throw new AppError(errorData.detail || 'Failed to login', response.status);
             }
 
@@ -40,7 +73,7 @@ export class ApiAuthGateway implements IAuthGateway {
             // We need to get user info from the token or make an additional call
             // For now, we extract user info from the access token payload if possible
             // or create a minimal user object with the tokens
-            
+
             const user = this.decodeJwtPayload(data.access);
 
             return {
@@ -113,7 +146,7 @@ export class ApiAuthGateway implements IAuthGateway {
             }
 
             const data = await response.json();
-            
+
             return {
                 valid: true,
                 userId: data.user_id

@@ -111,7 +111,7 @@ export default function HistoryClient({ initialScans }: HistoryClientProps) {
     return (
         <div className="flex flex-col min-h-screen min-h-[100dvh] bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 pb-20 relative">
             {/* Sticky Header Container */}
-            <div className="sticky top-0 z-20 bg-[#f6f8f6]/90 backdrop-blur-md border-b border-slate-200">
+            <div className="sticky top-0 z-20 bg-[#f6f8f6]/90 backdrop-blur-md">
                 {/* Header */}
                 <header className="flex flex-col pt-6 px-6">
                     <div className="flex items-center justify-between pb-4">

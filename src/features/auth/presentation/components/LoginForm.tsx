@@ -122,7 +122,7 @@ export default function LoginForm() {
                 {/* Sign Up Link */}
                 <p className="text-center text-slate-600 text-sm mt-2">
                     Don&apos;t have an account?{' '}
-                    <a href="#" className="text-[#11d442] font-semibold decoration-2 underline-offset-4 transition-all duration-200 hover:underline">Sign Up</a>
+                    <a href="/register" className="text-[#11d442] font-semibold decoration-2 underline-offset-4 transition-all duration-200 hover:underline">Sign Up</a>
                 </p>
 
                 {/* Bottom Safe Area Spacer for iOS */}

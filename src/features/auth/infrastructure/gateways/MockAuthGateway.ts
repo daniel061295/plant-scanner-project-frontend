@@ -1,9 +1,18 @@
 import { IAuthGateway, AuthTokens } from '../../domain/ports/IAuthGateway';
 import { LoginDTO } from '../../application/dtos/LoginDTO';
+import { RegisterDTO } from '../../application/dtos/RegisterDTO';
 import { User } from '../../domain/entities/User';
 import { AppError } from '@/core/errors/AppError';
 
 export class MockAuthGateway implements IAuthGateway {
+    async register(data: RegisterDTO): Promise<User> {
+        return {
+            id: 'mock-uuid',
+            email: data.email,
+            name: data.username,
+        };
+    }
+
     async login(credentials: LoginDTO): Promise<User> {
         // Mock login logic as requested by the user
         if (credentials.email === 'test@example.com' && credentials.password === 'password') {

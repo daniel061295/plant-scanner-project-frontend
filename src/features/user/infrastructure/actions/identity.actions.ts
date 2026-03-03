@@ -1,38 +1,56 @@
 'use server';
 
-import { ApiIdentityGateway } from '../gateways/ApiIdentityGateway';
+import { getAccessTokenAction } from '@/features/auth/infrastructure/actions/auth.actions';
 import { AppError } from '@/core/errors/AppError';
+import { clearProfileCache } from '@/core/auth/getSession';
+import { revalidatePath } from 'next/cache';
 
-export interface ProfileResult {
+export interface UpdateAvatarResult {
     success: boolean;
-    profile?: {
-        id: string;
-        email: string;
-        name: string;
-        avatar?: string;
-        first_name?: string;
-        last_name?: string;
-    };
+    avatarUrl?: string;
     error?: string;
 }
 
 /**
- * Server Action to get current user profile
+ * Server Action – upload a new avatar for the current user.
+ * @param base64 Full data-URL (e.g. "data:image/jpeg;base64,...") produced by canvas.
  */
-export async function getUserProfileAction(): Promise<ProfileResult> {
+export async function updateAvatarAction(base64: string): Promise<UpdateAvatarResult> {
     try {
-        const gateway = new ApiIdentityGateway();
-        const profile = await gateway.getProfile();
+        const accessToken = await getAccessTokenAction();
+        if (!accessToken) {
+            return { success: false, error: 'Not authenticated' };
+        }
 
-        return {
-            success: true,
-            profile,
-        };
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+        const response = await fetch(`${baseUrl}/identity/me/avatar/`, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ avatar: base64 }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new AppError(errorData.detail || 'Failed to update avatar', response.status);
+        }
+
+        const data = await response.json();
+
+        // Bust profile cache so the next render fetches fresh data
+        clearProfileCache();
+
+        // Invalidate the Next.js route cache for every page that shows the avatar
+        revalidatePath('/');
+        revalidatePath('/profile');
+
+        return { success: true, avatarUrl: data.avatar };
     } catch (error) {
-        const errorMessage = error instanceof AppError ? error.message : 'Failed to fetch user profile';
-        return {
-            success: false,
-            error: errorMessage,
-        };
+        const msg = error instanceof AppError ? error.message : 'Failed to update avatar';
+        return { success: false, error: msg };
     }
 }

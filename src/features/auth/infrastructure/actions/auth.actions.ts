@@ -1,10 +1,12 @@
 'use server';
 
-import { getLoginUseCase } from '@/core/di';
+import { getLoginUseCase, getRegisterUseCase } from '@/core/di';
 import { ApiAuthGateway } from '../gateways/ApiAuthGateway';
 import { storeTokens, clearTokens, getTokens, getRefreshToken, isTokenExpired } from '../utils/tokenManager';
 import { AppError } from '@/core/errors/AppError';
 import { redirect } from 'next/navigation';
+import { clearProfileCache } from '@/core/auth/getSession';
+import { revalidatePath } from 'next/cache';
 
 export interface LoginResult {
     success: boolean;
@@ -14,6 +16,50 @@ export interface LoginResult {
         email: string;
         name?: string;
     };
+}
+
+export interface RegisterResult {
+    success: boolean;
+    error?: string;
+    user?: {
+        id: string;
+        email: string;
+        name?: string;
+    };
+}
+
+/**
+ * Server Action for user registration
+ */
+export async function registerAction(
+    email: string,
+    username: string,
+    password: string,
+    avatar?: string
+): Promise<RegisterResult> {
+    try {
+        if (!email || !username || !password) {
+            return { success: false, error: 'Email, username and password are required' };
+        }
+
+        const registerUseCase = getRegisterUseCase();
+        const user = await registerUseCase.execute({
+            email,
+            username,
+            password,
+            role_names: ['free_user'],
+            plan_name: 'FREE',
+            avatar,
+        });
+
+        return {
+            success: true,
+            user: { id: user.id, email: user.email, name: user.name },
+        };
+    } catch (error) {
+        const errorMessage = error instanceof AppError ? error.message : 'Failed to register';
+        return { success: false, error: errorMessage };
+    }
 }
 
 /**
@@ -71,7 +117,12 @@ export async function logoutAction(): Promise<void> {
         // Log but don't fail - we want to clear tokens regardless
         console.warn('Logout error (non-blocking):', error);
     } finally {
+        clearProfileCache();
         await clearTokens();
+        // Bust Next.js router cache so the next user sees a clean slate
+        revalidatePath('/');
+        revalidatePath('/profile');
+        revalidatePath('/history');
     }
 
     redirect('/login');
@@ -204,7 +255,7 @@ export async function loginWithGoogleAction(credential: string): Promise<LoginRe
         });
 
         console.log('[Google Login] Response status:', response.status);
-        
+
         const responseText = await response.text();
         console.log('[Google Login] Response body:', responseText);
 

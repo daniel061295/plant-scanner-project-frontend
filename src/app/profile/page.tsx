@@ -2,10 +2,12 @@ import { redirect } from "next/navigation";
 import BottomNav from "@/features/shared/presentation/components/BottomNav";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton"; // A client component for logout logic
-import { IconArrowLeft, IconSettings, IconEdit, IconMail, IconScan, IconBug, IconUser, IconChevronRight, IconBell, IconLock, IconMoon, IconLanguage, IconCheck } from "@tabler/icons-react";
+import { IconArrowLeft, IconSettings, IconMail, IconScan, IconBug, IconUser, IconChevronRight, IconBell, IconLock, IconMoon, IconLanguage, IconCheck } from "@tabler/icons-react";
+import AvatarUploader from "@/features/user/presentation/components/AvatarUploader";
 import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
 import { getSession } from "@/core/auth/getSession";
 import { getPlansAction, getCurrentSubscriptionAction } from "@/features/billing/infrastructure/actions/billing.actions";
+import { getFirstName } from "@/core/utils/user";
 
 export const metadata = {
     title: "User Profile - Plant Health App",
@@ -44,7 +46,7 @@ export default async function ProfilePage() {
 
     return (
         <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] text-slate-900 antialiased">
-            <header className="flex items-center justify-between p-6 sticky top-0 bg-[#f6f8f6]/90 backdrop-blur-md z-20 border-b border-slate-200">
+            <header className="flex items-center justify-between p-6 sticky top-0 bg-[#f6f8f6]/90 backdrop-blur-md z-20">
                 <Link href="/" className="bg-transparent border-none p-0 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors">
                     <IconArrowLeft size={24} stroke={1.5} />
                 </Link>
@@ -57,19 +59,11 @@ export default async function ProfilePage() {
             <main className="flex-1 overflow-y-auto pb-24 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {/* Profile Header */}
                 <div className="flex flex-col items-center pt-2 pb-8 px-6">
-                    <div className="relative mb-4 cursor-pointer">
-                        <div className="w-28 h-28 rounded-full bg-slate-200 overflow-hidden shadow-[0_0_0_4px_#ffffff,0_10px_15px_-3px_rgba(0,0,0,0.1)]">
-                            <img
-                                alt="User profile"
-                                className="w-full h-full object-cover"
-                                src={session.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'User')}&background=13ec49&color=fff&size=128`}
-                            />
-                        </div>
-                        <div className="absolute bottom-0 right-0 bg-[#13ec49] text-slate-900 rounded-full p-1.5 flex items-center justify-center shadow-[0_0_0_4px_#ffffff]">
-                            <IconEdit size={14} stroke={2} />
-                        </div>
-                    </div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">{session.user?.name || "User"}</h2>
+                    <AvatarUploader
+                        currentAvatar={session.user?.avatar}
+                        displayName={session.user?.name || session.user?.email || 'User'}
+                    />
+                    <h2 className="text-2xl font-bold text-slate-900 mb-1">{getFirstName(session.user?.name, session.user?.email)}</h2>
                     {session.user?.email && (
                         <div className="flex items-center gap-1 text-slate-500">
                             <IconMail size={18} stroke={1.5} />

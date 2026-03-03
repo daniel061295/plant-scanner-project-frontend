@@ -8,6 +8,7 @@ import RecentScansCarousel, { RecentScan } from "@/features/plants/presentation/
 import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
 import PlantTip from "@/features/shared/presentation/components/PlantTip";
 import { getSession } from "@/core/auth/getSession";
+import { getFirstName } from "@/core/utils/user";
 
 export const dynamic = 'force-dynamic';
 
@@ -69,7 +70,7 @@ export default async function Home() {
           </div>
           <div>
             <p className="text-xs font-medium text-slate-500 m-0">Welcome back,</p>
-            <h3 className="text-sm font-bold text-slate-900 m-0 group-hover:text-[#0fb839] transition-colors">{session.user?.name || "User"}</h3>
+            <h3 className="text-sm font-bold text-slate-900 m-0 group-hover:text-[#0fb839] transition-colors">{getFirstName(session.user?.name, session.user?.email)}</h3>
           </div>
         </Link>
         <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border-none cursor-pointer transition-colors duration-200 text-slate-700 hover:bg-slate-50">
@@ -81,7 +82,7 @@ export default async function Home() {
         <section className="mt-6 mb-8">
           <h1 className="text-3xl font-bold leading-tight text-slate-900 m-0 mb-3">
             Hello, <br />
-            <span className="text-[#0fb839]">{session.user?.name?.split(' ')[0] || 'Green Thumb'}! 🌱</span>
+            <span className="text-[#0fb839]">{getFirstName(session.user?.name, session.user?.email)}! 🌱</span>
           </h1>
           <p className="text-base text-slate-600 leading-relaxed max-w-[90%] m-0">
             Identify diseases and get instant care tips for your garden in seconds.

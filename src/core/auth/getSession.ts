@@ -12,18 +12,10 @@ export interface Session {
     accessToken?: string;
 }
 
-// Simple in-memory cache for user profile (per-request in server components)
-let profileCache: {
-    data: Session['user'] | null;
-    timestamp: number;
-} | null = null;
-
-const PROFILE_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
 /**
- * Get current session from JWT cookies (Server Components)
- * Automatically refreshes the access token if it's about to expire
- * Fetches user profile from /identity/me/ endpoint
+ * Get current session from JWT cookies (Server Components).
+ * Always fetches fresh user data from /identity/me/ — no module-level cache
+ * so switching users always shows correct data.
  */
 export async function getSession(): Promise<Session | null> {
     const tokens = await getTokens();
@@ -32,71 +24,38 @@ export async function getSession(): Promise<Session | null> {
         return null;
     }
 
-    // Check if token is expired or about to expire (within 1 minute)
-    if (isTokenExpired(tokens.accessToken, 60)) {
-        // Try to refresh the token
-        if (tokens.refreshToken) {
-            try {
-                const authGateway = new ApiAuthGateway();
-                const newTokens = await authGateway.refreshToken(tokens.refreshToken);
-                await storeTokens(newTokens);
+    // Refresh token if expired or about to expire (within 1 minute)
+    let accessToken = tokens.accessToken;
 
-                // Clear profile cache when token is refreshed
-                profileCache = null;
-
-                const userId = getUserIdFromToken(newTokens.accessToken);
-                return {
-                    user: {
-                        id: userId || 'unknown',
-                        email: undefined,
-                        name: undefined,
-                        avatar: undefined,
-                    },
-                    accessToken: newTokens.accessToken,
-                };
-            } catch (error) {
-                // Refresh failed, return null (user needs to re-authenticate)
-                console.error('Failed to refresh token:', error);
-                return null;
-            }
+    if (isTokenExpired(accessToken, 60)) {
+        if (!tokens.refreshToken) return null;
+        try {
+            const authGateway = new ApiAuthGateway();
+            const newTokens = await authGateway.refreshToken(tokens.refreshToken);
+            await storeTokens(newTokens);
+            accessToken = newTokens.accessToken;
+        } catch {
+            return null;
         }
-        return null;
     }
 
-    // Check cache first
-    if (profileCache && (Date.now() - profileCache.timestamp) < PROFILE_CACHE_TTL) {
-        return {
-            user: profileCache.data!,
-            accessToken: tokens.accessToken,
-        };
-    }
-
-    // Fetch user profile from identity endpoint
+    // Always fetch fresh profile — no module-level cache to avoid cross-user contamination
     try {
         const identityGateway = new ApiIdentityGateway();
         const profile = await identityGateway.getProfile();
 
-        const userData = {
-            id: profile.id,
-            email: profile.email,
-            name: profile.name,
-            avatar: profile.avatar,
-        };
-
-        // Cache the profile
-        profileCache = {
-            data: userData,
-            timestamp: Date.now(),
-        };
-
         return {
-            user: userData,
-            accessToken: tokens.accessToken,
+            user: {
+                id: profile.id,
+                email: profile.email,
+                name: profile.name,
+                avatar: profile.avatar,
+            },
+            accessToken,
         };
-    } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-        // Fall back to token-based user info if identity endpoint fails
-        const userId = getUserIdFromToken(tokens.accessToken);
+    } catch {
+        // Fall back to token-based ID if identity endpoint fails
+        const userId = getUserIdFromToken(accessToken);
         return {
             user: {
                 id: userId || 'unknown',
@@ -104,7 +63,15 @@ export async function getSession(): Promise<Session | null> {
                 name: undefined,
                 avatar: undefined,
             },
-            accessToken: tokens.accessToken,
+            accessToken,
         };
     }
+}
+
+/**
+ * No-op kept for backward compatibility with existing imports.
+ * Cache was removed — this function is intentionally empty.
+ */
+export function clearProfileCache(): void {
+    // intentionally empty — cache removed
 }
