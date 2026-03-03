@@ -2,8 +2,9 @@ import { redirect } from "next/navigation";
 import BottomNav from "@/features/shared/presentation/components/BottomNav";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton"; // A client component for logout logic
-import { IconArrowLeft, IconSettings, IconMail, IconScan, IconBug, IconUser, IconChevronRight, IconBell, IconLock, IconMoon, IconLanguage, IconCheck } from "@tabler/icons-react";
+import { IconArrowLeft, IconSettings, IconMail, IconScan, IconBug, IconUser, IconChevronRight, IconLock, IconMoon, IconLanguage, IconCheck } from "@tabler/icons-react";
 import AvatarUploader from "@/features/user/presentation/components/AvatarUploader";
+import PrivacyPolicyButton from "./PrivacyPolicyButton";
 import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
 import { getSession } from "@/core/auth/getSession";
 import { getPlansAction, getCurrentSubscriptionAction } from "@/features/billing/infrastructure/actions/billing.actions";
@@ -185,41 +186,19 @@ export default async function ProfilePage() {
                             <IconChevronRight size={20} stroke={1.5} />
                         </div>
                     </div>
+
+                    {/* Coming-Soon notice */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#13ec49]/10 border border-[#13ec49]/25">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#13ec49] shrink-0" />
+                        <p className="text-xs font-semibold text-[#0ea635] m-0">These features are coming soon. Stay tuned! 🌱</p>
+                    </div>
                 </div>
 
                 {/* Account Links */}
                 <div className="px-6 flex flex-col gap-2">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-2 mb-2">Account</h3>
 
-                    <Link href="#" className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-slate-50 transition-colors w-full cursor-pointer group">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center transition-colors group-hover:bg-[#13ec49]/20 group-hover:text-[#13ec49]">
-                                <IconUser size={24} stroke={1.5} />
-                            </div>
-                            <span className="font-medium text-slate-900">Account Settings</span>
-                        </div>
-                        <IconChevronRight size={20} stroke={1.5} className="text-slate-400" />
-                    </Link>
-
-                    <Link href="#" className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-slate-50 transition-colors w-full cursor-pointer group">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center transition-colors group-hover:bg-[#13ec49]/20 group-hover:text-[#13ec49]">
-                                <IconBell size={24} stroke={1.5} />
-                            </div>
-                            <span className="font-medium text-slate-900">Notification Preferences</span>
-                        </div>
-                        <IconChevronRight size={20} stroke={1.5} className="text-slate-400" />
-                    </Link>
-
-                    <Link href="#" className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-slate-50 transition-colors w-full cursor-pointer group">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center transition-colors group-hover:bg-[#13ec49]/20 group-hover:text-[#13ec49]">
-                                <IconLock size={24} stroke={1.5} />
-                            </div>
-                            <span className="font-medium text-slate-900">Privacy Policy</span>
-                        </div>
-                        <IconChevronRight size={20} stroke={1.5} className="text-slate-400" />
-                    </Link>
+                    <PrivacyPolicyButton />
 
                     <LogoutButton />
                 </div>

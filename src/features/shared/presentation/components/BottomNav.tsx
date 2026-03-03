@@ -24,10 +24,10 @@ export default function BottomNav({ currentPath }: BottomNavProps) {
                             href={item.path}
                             className={`group flex flex-col items-center justify-center gap-1 flex-1 no-underline cursor-pointer transition-colors duration-300 hover:text-[#13ec49] ${isActive ? 'text-slate-900' : 'text-slate-400'}`}
                         >
-                            <div className={`flex items-center justify-center h-8 w-12 rounded-full transition-all duration-300 relative ${isActive ? 'bg-transparent text-[#13ec49] scale-110' : 'hover:bg-[#13ec490d] scale-100'}`}>
+                            <div className={`flex items-center justify-center h-8 w-12 rounded-full transition-all duration-300 relative ${isActive ? 'bg-transparent text-[#166534] scale-110' : 'hover:bg-[#13ec490d] scale-100'}`}>
                                 <item.Icon size={28} stroke={isActive ? 2.5 : 1.5} className="transition-all duration-300" />
                                 {/* Active Dot Indicator with transition */}
-                                <span className={`absolute -top-1 right-2 w-2 h-2 bg-[#13ec49] rounded-full transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}></span>
+                                <span className={`absolute -top-1 right-2 w-2 h-2 bg-[#166534] rounded-full transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}></span>
                             </div>
                             <span className={`text-[10px] transition-all duration-300 ${isActive ? 'font-bold tracking-wide' : 'font-medium'}`}>{item.name}</span>
                         </Link>

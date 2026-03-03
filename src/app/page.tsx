@@ -73,9 +73,9 @@ export default async function Home() {
             <h3 className="text-sm font-bold text-slate-900 m-0 group-hover:text-[#0fb839] transition-colors">{getFirstName(session.user?.name, session.user?.email)}</h3>
           </div>
         </Link>
-        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border-none cursor-pointer transition-colors duration-200 text-slate-700 hover:bg-slate-50">
+        <Link href="/profile" className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border-none cursor-pointer transition-colors duration-200 text-slate-700 hover:bg-slate-50">
           <IconSettings size={22} stroke={1.5} />
-        </button>
+        </Link>
       </header>
 
       <main className="flex-1 overflow-y-auto pb-24 px-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
