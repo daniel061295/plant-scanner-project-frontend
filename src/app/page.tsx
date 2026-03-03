@@ -1,65 +1,121 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Suspense } from "react";
+import { IconSettings, IconHistory, IconDroplet } from '@tabler/icons-react';
+import PlantUploader from "@/features/plants/presentation/components/PlantUploader";
+import BottomNav from "@/features/shared/presentation/components/BottomNav";
+import RecentScansCarousel, { RecentScan } from "@/features/plants/presentation/components/RecentScansCarousel";
+import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
+import PlantTip from "@/features/shared/presentation/components/PlantTip";
+import { getSession } from "@/core/auth/getSession";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+// Helper to format date relative to now
+function getRelativeTime(dateInput?: string | Date): string {
+  if (!dateInput) return "Unknown time";
+  const date = new Date(dateInput);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 1000 / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 60) return `${Math.max(1, diffMins)} min${diffMins !== 1 ? 's' : ''} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays <= 30) return `${diffDays} days ago`;
+
+  return date.toLocaleDateString();
+}
+
+export default async function Home() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  // Fetch actual history for recent diagnoses
+  const historyResponse = await getScanHistoryAction();
+  let recentScans: RecentScan[] = [];
+
+  if (historyResponse.success && historyResponse.data) {
+    const sorted = [...historyResponse.data].sort((a, b) => {
+      const da = a.scannedAt ? new Date(a.scannedAt).getTime() : 0;
+      const db = b.scannedAt ? new Date(b.scannedAt).getTime() : 0;
+      return db - da; // Descending
+    });
+
+    recentScans = sorted.slice(0, 5).map(item => ({
+      id: item.id,
+      name: item.title || item.plantName,
+      time: getRelativeTime(item.scannedAt),
+      category: item.isHealthy ? 'Healthy' : 'Attention Needed',
+      imgUrl: item.imageUrl || ''
+    }));
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
+      <header className="sticky top-0 z-20 flex items-center justify-between px-6 pt-6 pb-2 bg-[#f6f8f6e6] backdrop-blur-sm">
+        <Link href="/profile" className="flex items-center gap-3 no-underline cursor-pointer group">
+          <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-[#13ec49] p-0.5 group-hover:border-[#0fb839] transition-colors">
+            <img
+              alt="User Profile"
+              className="h-full w-full rounded-full object-cover"
+              src={session.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'User')}&background=13ec49&color=fff`}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-slate-500 m-0">Welcome back,</p>
+            <h3 className="text-sm font-bold text-slate-900 m-0 group-hover:text-[#0fb839] transition-colors">{session.user?.name || "User"}</h3>
+          </div>
+        </Link>
+        <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border-none cursor-pointer transition-colors duration-200 text-slate-700 hover:bg-slate-50">
+          <IconSettings size={22} stroke={1.5} />
+        </button>
+      </header>
+
+      <main className="flex-1 overflow-y-auto pb-24 px-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <section className="mt-6 mb-8">
+          <h1 className="text-3xl font-bold leading-tight text-slate-900 m-0 mb-3">
+            Hello, <br />
+            <span className="text-[#0fb839]">{session.user?.name?.split(' ')[0] || 'Green Thumb'}! 🌱</span>
+          </h1>
+          <p className="text-base text-slate-600 leading-relaxed max-w-[90%] m-0">
+            Identify diseases and get instant care tips for your garden in seconds.
+          </p>
+        </section>
+
+        <section className="mt-8 mb-12">
+          <Suspense fallback={<div className="h-40 w-full animate-pulse bg-slate-100 rounded-3xl" />}>
+            <PlantUploader />
+          </Suspense>
+        </section>
+
+        <section className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-slate-900 m-0">Recent Diagnoses</h2>
+            <Link href="/history" className="text-xs font-semibold text-[#0fb839] no-underline hover:underline">View All</Link>
+          </div>
+
+          {recentScans.length > 0 ? (
+            <RecentScansCarousel scans={recentScans} />
+          ) : (
+            <div className="text-center py-6 px-4 bg-white rounded-2xl border border-slate-100 shadow-sm text-slate-500 text-sm">
+              <IconHistory size={32} stroke={1.5} className="block text-slate-300 mx-auto w-full mb-2" />
+              No recent scans yet. Scan a plant to get started!
+            </div>
+          )}
+        </section>
+
+        <section className="mt-6">
+          <PlantTip />
+        </section>
       </main>
+
+      <BottomNav currentPath="/" />
     </div>
   );
 }

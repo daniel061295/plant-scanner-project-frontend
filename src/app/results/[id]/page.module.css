@@ -1,0 +1,165 @@
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9fafb;
+}
+
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid #f3f4f6;
+    border-top-color: #13ec49;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #111827;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-right: 1rem;
+}
+
+.headerTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+    padding-right: 2.5rem;
+    /* Balance back button */
+}
+
+.imageContainer {
+    width: 100%;
+    height: 250px;
+    background-color: #f3f4f6;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content {
+    padding: 1.5rem;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    background-color: white;
+    margin-top: -1.5rem;
+    position: relative;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.titleSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.diseaseName {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #111827;
+    margin: 0;
+}
+
+.confidenceBadge {
+    background-color: #13ec49;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.description {
+    font-size: 1rem;
+    color: #4b5563;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+.actionsTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+.actionList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.actionItem {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.checkIcon {
+    background-color: #13ec49;
+    color: white;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-top: 0.125rem;
+}
+
+.actionItemTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.25rem;
+}
+
+.actionItemText {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.4;
+}
