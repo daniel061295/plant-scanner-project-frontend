@@ -17,7 +17,8 @@ export class ApiSubscriptionRepository implements ISubscriptionRepository {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/billing/me/", {
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+            const response = await fetch(`${baseUrl}/billing/me/`, {
                 method: "GET",
                 headers,
                 // Cache control can be short as usage might change frequently

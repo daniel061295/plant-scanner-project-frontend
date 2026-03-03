@@ -15,7 +15,8 @@ export class ApiPlanRepository implements IPlanRepository {
             headers["Authorization"] = `Bearer ${session.accessToken}`;
         }
 
-        const response = await fetch("http://127.0.0.1:8000/billing/plans/", {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        const response = await fetch(`${baseUrl}/billing/plans/`, {
             method: "GET",
             headers,
             // Cache control could be added here based on requirement, e.g., next: { revalidate: 3600 }
