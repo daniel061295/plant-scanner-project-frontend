@@ -50,4 +50,16 @@ export class MockAuthGateway implements IAuthGateway {
         }
         return { valid: false };
     }
+
+    async requestPasswordReset(email: string): Promise<boolean> {
+        // Mock request password reset
+        console.log(`Mock: Password reset requested for ${email}`);
+        return Promise.resolve(true);
+    }
+
+    async confirmPasswordReset(uid: string, token: string, newPassword: string): Promise<boolean> {
+        // Mock confirm password reset
+        console.log(`Mock: Password reset confirmed for uid=${uid}, token=${token}`);
+        return Promise.resolve(true);
+    }
 }
