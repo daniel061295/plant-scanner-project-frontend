@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { IconLeaf, IconMail, IconLock, IconEye, IconEyeOff, IconArrowRight } from "@tabler/icons-react";
 import { loginAction } from "../../infrastructure/actions/auth.actions";
 import GoogleButton from "./GoogleButton";
@@ -96,7 +97,7 @@ export default function LoginForm() {
                             </button>
                         </div>
                         <div className="flex justify-end mt-1">
-                            <a href="#" className="text-sm font-medium text-[#11d442] no-underline transition-colors duration-200 hover:text-[#11d442cc]">Forgot Password?</a>
+                            <Link href="/forgot-password" className="text-sm font-medium text-[#11d442] no-underline transition-colors duration-200 hover:text-[#11d442cc]">Forgot Password?</Link>
                         </div>
                     </div>
 

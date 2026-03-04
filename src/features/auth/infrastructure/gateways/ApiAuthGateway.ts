@@ -181,6 +181,60 @@ export class ApiAuthGateway implements IAuthGateway {
         }
     }
 
+    async requestPasswordReset(email: string): Promise<boolean> {
+        try {
+            const response = await fetch(`${this.baseUrl}/identity/users/password-reset-request/`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new AppError(errorData.detail || 'Failed to request password reset', response.status);
+            }
+
+            return true;
+        } catch (error) {
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError('Network error while requesting password reset', 500);
+        }
+    }
+
+    async confirmPasswordReset(uid: string, token: string, new_password: string): Promise<boolean> {
+        try {
+            const response = await fetch(`${this.baseUrl}/identity/users/password-reset-confirm/`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uidb64: uid,
+                    token,
+                    new_password
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new AppError(errorData.detail || 'Failed to confirm password reset', response.status);
+            }
+
+            return true;
+        } catch (error) {
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError('Network error while confirming password reset', 500);
+        }
+    }
+
     /**
      * Decode JWT payload to extract user information
      * Note: This does NOT verify the signature - only decodes the payload

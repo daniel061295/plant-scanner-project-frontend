@@ -341,3 +341,41 @@ function getEmailFromJwt(token: string): string | null {
         return null;
     }
 }
+
+/**
+ * Server Action to request a password reset email
+ */
+export async function forgotPasswordAction(email: string): Promise<{ success: boolean; error?: string }> {
+    try {
+        if (!email) {
+            return { success: false, error: 'Email is required' };
+        }
+
+        const authGateway = new ApiAuthGateway();
+        await authGateway.requestPasswordReset(email);
+
+        return { success: true };
+    } catch (error) {
+        const errorMessage = error instanceof AppError ? error.message : 'Failed to request password reset';
+        return { success: false, error: errorMessage };
+    }
+}
+
+/**
+ * Server Action to confirm password reset with new password
+ */
+export async function resetPasswordAction(uid: string, token: string, new_password: string): Promise<{ success: boolean; error?: string }> {
+    try {
+        if (!uid || !token || !new_password) {
+            return { success: false, error: 'All fields are required' };
+        }
+
+        const authGateway = new ApiAuthGateway();
+        await authGateway.confirmPasswordReset(uid, token, new_password);
+
+        return { success: true };
+    } catch (error) {
+        const errorMessage = error instanceof AppError ? error.message : 'Failed to reset password';
+        return { success: false, error: errorMessage };
+    }
+}

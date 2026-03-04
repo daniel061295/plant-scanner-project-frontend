@@ -13,4 +13,6 @@ export interface IAuthGateway {
     refreshToken(refreshToken: string): Promise<AuthTokens>;
     logout(refreshToken: string): Promise<void>;
     verifyToken(token: string): Promise<{ valid: boolean; userId?: string }>;
+    requestPasswordReset(email: string): Promise<boolean>;
+    confirmPasswordReset(uid: string, token: string, new_password: string): Promise<boolean>;
 }
