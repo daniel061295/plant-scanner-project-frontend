@@ -42,8 +42,15 @@ export class ApiHistoryRepository implements IHistoryRepository {
         return data.map(item => {
             // Handle base64 photo prefix
             let imageUrl = item.photo || '';
-            // Only add the data: prefix if it's raw Base64 (not a full URL or existing data URI)
-            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            imageUrl = imageUrl.trim();
+            // console.log("Raw photo URL from backend:", imageUrl);
+
+            if (imageUrl.startsWith('/')) {
+                // If it's a relative URL from the backend, prepend the base API URL
+                const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+                imageUrl = `${baseUrl.replace(/\/$/, '')}${imageUrl}`;
+            } else if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+                // Only add the data: prefix if it's raw Base64
                 imageUrl = `data:image/jpeg;base64,${imageUrl}`;
             }
 
