@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import BottomNav from "@/features/shared/presentation/components/BottomNav";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton"; // A client component for logout logic
 import { IconArrowLeft, IconSettings, IconMail, IconScan, IconBug, IconUser, IconChevronRight, IconLock, IconMoon, IconLanguage, IconCheck } from "@tabler/icons-react";
@@ -203,8 +202,6 @@ export default async function ProfilePage() {
                     <LogoutButton />
                 </div>
             </main>
-
-            <BottomNav currentPath="/profile" />
         </div>
     );
 }

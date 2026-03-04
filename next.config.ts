@@ -13,12 +13,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.r2.dev",
       },
+      // Railway backend (Local Media Fallback)
+      {
+        protocol: "https",
+        hostname: "django-clean-architecture-crud-production.up.railway.app",
+      },
       // UI Avatars fallback
       {
         protocol: "https",
         hostname: "ui-avatars.com",
       },
     ],
+  },
+  experimental: {
+    staleTimes: {
+      dynamic: 300,
+    },
   },
 };
 

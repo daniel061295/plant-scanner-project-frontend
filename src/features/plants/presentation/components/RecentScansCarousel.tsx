@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 
 import Link from "next/link";
+import Image from "next/image";
 import { IconClock } from '@tabler/icons-react';
 
 export type RecentScan = {
@@ -85,10 +86,12 @@ export default function RecentScansCarousel({ scans }: RecentScansCarouselProps)
                     style={{ height: "205px" }} // Fixed height to keep cards uniform
                 >
                     <div className="relative h-32 w-full bg-slate-100 shrink-0">
-                        <img
+                        <Image
                             alt={scan.name}
-                            className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                            className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                             src={scan.imgUrl}
+                            fill
+                            sizes="(max-width: 768px) 200px, 200px"
                             onDragStart={(e) => e.preventDefault()} // Extra protection for image default drag
                         />
                         <div

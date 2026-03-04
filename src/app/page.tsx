@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { IconSettings, IconHistory, IconDroplet } from '@tabler/icons-react';
 import PlantUploader from "@/features/plants/presentation/components/PlantUploader";
-import BottomNav from "@/features/shared/presentation/components/BottomNav";
 import RecentScansCarousel, { RecentScan } from "@/features/plants/presentation/components/RecentScansCarousel";
 import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
 import PlantTip from "@/features/shared/presentation/components/PlantTip";
@@ -115,8 +114,6 @@ export default async function Home() {
           <PlantTip />
         </section>
       </main>
-
-      <BottomNav currentPath="/" />
     </div>
   );
 }

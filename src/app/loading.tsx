@@ -46,8 +46,6 @@ export default function HomeLoading() {
                     <div className="h-20 w-full bg-slate-200 rounded-2xl"></div>
                 </section>
             </main>
-
-            <BottomNav currentPath="/" />
         </div>
     );
 }

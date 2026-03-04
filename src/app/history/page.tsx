@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import BottomNav from "@/features/shared/presentation/components/BottomNav";
 import { getScanHistoryAction } from "@/features/history/infrastructure/actions/history.actions";
 import { PlantScanResult } from "@/features/plants/domain/entities/PlantScanResult";
 import HistoryClient from "./HistoryClient";
@@ -23,7 +22,6 @@ export default async function HistoryPage() {
     return (
         <>
             <HistoryClient initialScans={rawHistoryResults} />
-            <BottomNav currentPath="/history" />
         </>
     );
 }

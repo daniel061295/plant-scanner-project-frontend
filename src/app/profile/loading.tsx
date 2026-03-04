@@ -79,8 +79,6 @@ export default function ProfileLoading() {
                     </div>
                 </div>
             </main>
-
-            <BottomNav currentPath="/profile" />
         </div>
     );
 }

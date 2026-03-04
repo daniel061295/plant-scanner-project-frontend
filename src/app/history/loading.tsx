@@ -1,5 +1,3 @@
-import BottomNav from "@/features/shared/presentation/components/BottomNav";
-
 export default function HistoryLoading() {
     return (
         <div className="flex flex-col min-h-screen min-h-[100dvh] bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 overflow-hidden relative">
@@ -54,8 +52,6 @@ export default function HistoryLoading() {
                     </div>
                 </div>
             </main>
-
-            <BottomNav currentPath="/history" />
         </div>
     );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { PlantScanResult } from "@/features/plants/domain/entities/PlantScanResult";
 import { IconSearch, IconHistory, IconCircleCheck, IconVirus, IconStethoscope, IconBug, IconArrowLeft, IconX, IconChevronRight } from "@tabler/icons-react";
 
@@ -201,10 +202,13 @@ export default function HistoryClient({ initialScans }: HistoryClientProps) {
                                 return (
                                     <Link href={`/results/${item.id}`} key={item.id} className="relative flex items-center gap-4 p-3 bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] border border-slate-100 cursor-pointer transition-all duration-200 hover:border-[#13ec4980] active:scale-[0.99] group no-underline">
                                         <div className="relative shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-slate-100">
-                                            <div
-                                                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                                style={{ backgroundImage: `url('${item.imageUrl}')` }}
-                                            ></div>
+                                            <Image
+                                                src={item.imageUrl}
+                                                alt={item.name}
+                                                fill
+                                                sizes="80px"
+                                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
                                         </div>
                                         <div className="flex-1 min-w-0 py-1">
                                             <div className="flex justify-between items-start mb-1">

@@ -1,12 +1,12 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { IconHome, IconHistory, IconUser } from '@tabler/icons-react';
 
-interface BottomNavProps {
-    currentPath: string;
-}
-
-export default function BottomNav({ currentPath }: BottomNavProps) {
+export default function BottomNav() {
+    const currentPath = usePathname();
     const navItems = [
         { name: 'Home', path: '/', Icon: IconHome },
         { name: 'History', path: '/history', Icon: IconHistory },
