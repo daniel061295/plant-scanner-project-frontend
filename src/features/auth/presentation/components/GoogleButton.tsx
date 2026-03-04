@@ -13,7 +13,7 @@ export default function GoogleButton() {
     const handleSuccess = async (credentialResponse: CredentialResponse) => {
         setError(false);
         setErrorMessage("");
-        
+
         if (!credentialResponse.credential) {
             setError(true);
             setErrorMessage("No credential received from Google");
@@ -37,7 +37,7 @@ export default function GoogleButton() {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full flex flex-col items-center justify-center">
             <GoogleLogin
                 onSuccess={handleSuccess}
                 onError={handleError}
