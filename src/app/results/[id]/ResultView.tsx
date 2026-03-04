@@ -55,7 +55,7 @@ export default function ResultView({ serverResult, scanId }: { serverResult: Pla
 
     return (
         <div className="flex flex-col min-h-screen min-h-[100dvh] bg-white font-['Lexend',sans-serif] text-slate-900 pb-20 relative">
-            <header className="flex items-center justify-between p-6 sticky top-0 bg-white/90 backdrop-blur-md z-20 border-b border-slate-100">
+            <header className="flex items-center justify-between p-6 sticky top-0 bg-white/90 backdrop-blur-md z-20">
                 <BackButton />
                 <h1 className="text-xl font-bold m-0 flex-1 text-center text-slate-800 tracking-tight">Diagnostic Results</h1>
                 <div className="w-8"></div> {/* Spacer to perfectly center the title against the back button */}
