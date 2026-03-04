@@ -42,7 +42,8 @@ export class ApiHistoryRepository implements IHistoryRepository {
         return data.map(item => {
             // Handle base64 photo prefix
             let imageUrl = item.photo || '';
-            if (imageUrl && !imageUrl.startsWith('data:image')) {
+            // Only add the data: prefix if it's raw Base64 (not a full URL or existing data URI)
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
                 imageUrl = `data:image/jpeg;base64,${imageUrl}`;
             }
 

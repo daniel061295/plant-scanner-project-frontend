@@ -59,7 +59,8 @@ export class ApiPlantScanGateway implements IPlantScanGateway {
 
             // Handle base64 photo prefix
             let imageUrl = data.photo || '';
-            if (imageUrl && !imageUrl.startsWith('data:image')) {
+            // Only add the data: prefix if it's raw Base64 (not a full URL or existing data URI)
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
                 imageUrl = `data:image/jpeg;base64,${imageUrl}`;
             }
 
