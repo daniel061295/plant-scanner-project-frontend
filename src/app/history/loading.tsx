@@ -1,6 +1,6 @@
 export default function HistoryLoading() {
     return (
-        <div className="flex flex-col min-h-screen min-h-[100dvh] bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 overflow-hidden relative">
+        <div className="flex flex-col min-h-screen bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 relative">
             {/* Header Skeleton */}
             <header className="flex items-center justify-between p-6 sticky top-0 bg-[#f6f8f6]/90 backdrop-blur-md z-20 border-b border-slate-200 animate-pulse">
                 <div className="h-6 w-6 bg-slate-200 rounded-full shrink-0"></div>
@@ -18,8 +18,7 @@ export default function HistoryLoading() {
                 </div>
             </div>
 
-            {/* Main Content Skeleton */}
-            <main className="flex-1 overflow-y-auto px-4 pb-24 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden animate-pulse">
+            <main className="flex-1 px-4 pb-28 scroll-smooth animate-pulse">
                 <div className="mb-6">
                     <div className="h-3 w-20 bg-slate-300 rounded mb-3 ml-2"></div>
 

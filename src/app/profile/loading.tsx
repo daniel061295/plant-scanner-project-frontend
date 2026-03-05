@@ -3,7 +3,7 @@ import { IconArrowLeft, IconSettings, IconMoon, IconLanguage, IconChevronRight }
 
 export default function ProfileLoading() {
     return (
-        <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] text-slate-900 antialiased">
+        <div className="flex flex-col min-h-screen w-full bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
             {/* Header */}
             <header className="flex items-center justify-between p-6 sticky top-0 bg-[#f6f8f6]/90 backdrop-blur-md z-20">
                 <div className="text-slate-600 flex items-center justify-center">
@@ -15,7 +15,7 @@ export default function ProfileLoading() {
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto pb-24 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] animate-pulse">
+            <main className="flex-1 pb-28 px-6 animate-pulse">
                 {/* Profile Header Skeleton */}
                 <div className="flex flex-col items-center pt-2 pb-8 px-6">
                     <div className="w-24 h-24 rounded-full bg-slate-200 mb-4"></div>

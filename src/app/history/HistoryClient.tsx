@@ -110,7 +110,7 @@ export default function HistoryClient({ initialScans }: HistoryClientProps) {
     }, [filteredScans]);
 
     return (
-        <div className="flex flex-col min-h-screen min-h-[100dvh] bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 pb-20 relative">
+        <div className="flex flex-col min-h-screen bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 relative">
             {/* Sticky Header Container */}
             <div className="sticky top-0 z-20 bg-[#f6f8f6]/90 backdrop-blur-md">
                 {/* Header */}
@@ -174,7 +174,7 @@ export default function HistoryClient({ initialScans }: HistoryClientProps) {
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 px-4 scroll-smooth">
+            <main className="flex-1 px-4 pb-28 scroll-smooth">
                 {groupedData.length === 0 && (
                     <div className="flex flex-col items-center justify-center mt-20 text-slate-500">
                         <IconHistory size={48} stroke={1.5} className="text-slate-300 mb-4" />

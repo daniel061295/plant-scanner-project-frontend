@@ -45,7 +45,7 @@ export default async function ProfilePage() {
     }).length;
 
     return (
-        <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] text-slate-900 antialiased">
+        <div className="flex flex-col min-h-screen w-full bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
             <header className="flex items-center justify-between p-6 sticky top-0 bg-[#f6f8f6]/90 backdrop-blur-md z-20">
                 <Link href="/" className="bg-transparent border-none p-0 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors">
                     <IconArrowLeft size={24} stroke={1.5} />
@@ -56,7 +56,7 @@ export default async function ProfilePage() {
                 </button>
             </header>
 
-            <main className="flex-1 overflow-y-auto pb-24 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <main className="flex-1 pb-28 px-6">
                 {/* Profile Header */}
                 <div className="flex flex-col items-center pt-2 pb-8 px-6">
                     <AvatarUploader

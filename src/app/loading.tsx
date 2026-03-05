@@ -2,7 +2,7 @@ import BottomNav from "@/features/shared/presentation/components/BottomNav";
 
 export default function HomeLoading() {
     return (
-        <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
+        <div className="flex flex-col min-h-screen w-full bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
             {/* Header Skeleton */}
             <header className="sticky top-0 z-20 flex items-center justify-between px-6 pt-6 pb-2 bg-[#f6f8f6e6] backdrop-blur-sm animate-pulse">
                 <div className="flex items-center gap-3">
@@ -16,7 +16,7 @@ export default function HomeLoading() {
             </header>
 
             {/* Main Content Skeleton */}
-            <main className="flex-1 overflow-y-auto pb-24 px-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden animate-pulse">
+            <main className="flex-1 pb-28 px-6 animate-pulse">
                 {/* Greeting */}
                 <section className="mt-6 mb-8">
                     <div className="h-8 w-32 bg-slate-300 rounded mb-2"></div>

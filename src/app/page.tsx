@@ -57,7 +57,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="relative flex flex-col min-h-screen min-h-[100dvh] w-full overflow-hidden bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
+    <div className="relative flex flex-col min-h-screen w-full bg-[#f6f8f6] font-['Lexend',sans-serif] text-slate-900 antialiased">
       <header className="sticky top-0 z-20 flex items-center justify-between px-6 pt-6 pb-2 bg-[#f6f8f6e6] backdrop-blur-sm">
         <Link href="/profile" className="flex items-center gap-3 no-underline cursor-pointer group">
           <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-[#13ec49] p-0.5 group-hover:border-[#0fb839] transition-colors">
@@ -77,7 +77,7 @@ export default async function Home() {
         </Link>
       </header>
 
-      <main className="flex-1 overflow-y-auto pb-24 px-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <main className="flex-1 pb-28 px-6">
         <section className="mt-6 mb-8">
           <h1 className="text-3xl font-bold leading-tight text-slate-900 m-0 mb-3">
             Hello, <br />
